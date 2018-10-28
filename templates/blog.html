@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+Build-A-Blog
+{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content %}
+{% if one_post == False %}
+  <h1>Welcome</h1>
+
+<hr />
+
+    {% if blogs|length == 0 %}
+    <p>You haven't posted anything</p>
+    {% else %}
+
+        <ul>
+            {% for blog in blogs %}
+          <a href='/blog?id={{blog.id}}'><h2>{{blog.name}}</h2> </a>
+          <h3><p>{{blog.blog}}</p></h3>
+            {% endfor %}
+        </ul>
+     {% endif %}
+{% else %}
+<h1>{{blog.name}}</h1>
+<p>{{blog.blog}}</p>
+{% endif %}
+
+{% endblock %}
