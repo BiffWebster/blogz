@@ -1,9 +1,9 @@
-from flask import Flask, request, redirect, render_template, session
+from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:buildablog@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:blogz@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = '48957w9875kjsdhfkahsdkj'
@@ -13,20 +13,34 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     b_title = db.Column(db.String(50))
     blog = db.Column(db.String(600))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
     def __init__(self, b_title, blog):
         self.b_title = b_title
         self.blog = blog
 
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(10), unique=True)
+    password = db.Column(db.String(20))
+    blog = db.relationship('Blog', backref='owner')
+
+    def __init__(self, username, password, blog):
+        self.username = username
+        self.password = password
+        self.blog = blog
+
+
 def title_validate(b_title):
-    if b_title == None:
+    if b_title is None:
         return "enter a title"
     else:
         return ""
 
 def blog_validate(blog):
-    if blog == None:
+    if blog is None:
         return "please enter a paragraph"
     else:
         return ""
@@ -60,7 +74,6 @@ def new_blog():
             return redirect('/blog?id=' + str(new_blog.id))
     else:
         return render_template("newpost.html", title="New One")
-
 
 
 
