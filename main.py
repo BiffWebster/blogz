@@ -11,22 +11,22 @@ app.secret_key = '48957w9875kjsdhfkahsdkj'
 class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    b_title = db.Column(db.String(50))
     blog = db.Column(db.String(600))
 
 
-    def __init__(self, name, blog):
-        self.name = name
+    def __init__(self, b_title, blog):
+        self.b_title = b_title
         self.blog = blog
 
-def blog_name_validate(name):
-    if name == "":
+def title_validate(b_title):
+    if b_title == None:
         return "enter a title"
     else:
         return ""
 
-def blog_body_validate(content):
-    if content == "":
+def blog_validate(blog):
+    if blog == None:
         return "please enter a paragraph"
     else:
         return ""
@@ -38,23 +38,23 @@ def index():
 
     id = request.args.get('id')
     if id != None:
-        data=Blog.query.filter_by(id=id).all()
-        return render_template('blog.html', title=data[0].name, blog=data[0], one_post=True)
+        info=Blog.query.filter_by(id=id).all()
+        return render_template('blog.html', title=info[0].b_title, blog=info[0], one_post=True)
     else:
-        data = Blog.query.all()
-        return render_template('blog.html', title="Build A Blog", blogs=data, one_post=False)
+        info = Blog.query.all()
+        return render_template('blog.html', title="Build A Blog", blog=info, one_post=False)
 
 
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_blog():
     if request.method == 'POST':
-        blog_name = request.form.get('name')
-        blog_body = request.form.get('content')
-        if blog_name_validate(blog_name) or blog_body_validate(blog_body) != "":
-            return render_template('newpost.html', title="Enter new blog", title_error=blog_name_validate(blog_name), content_error=blog_body_validate(blog_body), old_name=blog_name, old_entry=blog_body)
+        b_title = request.form.get('name')
+        blog = request.form.get('content')
+        if title_validate(b_title) or blog_validate(blog) != "":
+            return render_template('newpost.html', title="Enter new blog", title_error=title_validate(b_title), c_error=blog_validate(blog), old_name=b_title, old_entry=blog)
         else:
-            new_blog = Blog(blog_name, blog_body)
+            new_blog = Blog(b_title, blog)
             db.session.add(new_blog)
             db.session.commit()
             return redirect('/blog?id=' + str(new_blog.id))
