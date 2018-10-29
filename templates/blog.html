@@ -10,19 +10,19 @@ Build-A-Blog
 
 <hr />
 
-    {% if blogs|length == 0 %}
+    {% if blog|length == 0 %}
     <p>You haven't posted anything</p>
     {% else %}
 
         <ul>
-            {% for blog in blogs %}
-          <a href='/blog?id={{blog.id}}'><h2>{{blog.name}}</h2> </a>
+            {% for blog in blog %}
+          <a href='/blog?id={{blog.id}}'><h2>{{blog.b_title}}</h2> </a>
           <h3><p>{{blog.blog}}</p></h3>
             {% endfor %}
         </ul>
      {% endif %}
 {% else %}
-<h1>{{blog.name}}</h1>
+<h1>{{blog.b_title}}</h1>
 <p>{{blog.blog}}</p>
 {% endif %}
 
