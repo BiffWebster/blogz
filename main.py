@@ -45,6 +45,11 @@ def blog_validate(blog):
     else:
         return ""
 
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'signup']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
 
 
 @app.route('/blog', methods=['GET', 'POST'])
@@ -57,6 +62,21 @@ def index():
     else:
         info = Blog.query.all()
         return render_template('blog.html', title="Build A Blog", blog=info, one_post=False)
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            session['username'] = username
+            flash("Logged in")
+            return redirect('/newpost')
+        else:
+            flash('User password incorrect, or user does not exist', 'error')
+
+    return render_template('login.html')
 
 
 
@@ -75,6 +95,27 @@ def new_blog():
     else:
         return render_template("newpost.html", title="New One")
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        # TODO - validate user's data
+
+        existing_user = User.query.filter_by(email=email).first()
+        if not existing_user:
+            new_user = User(email, password)
+            db.session.add(new_user)
+            db.session.commit()
+            session['email'] = email
+            return redirect('/')
+        else:
+            # TODO - user better response messaging
+            return "<h1>Duplicate user</h1>"
+
+return render_template('register.html')
 
 
 if __name__ == '__main__':
