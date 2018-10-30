@@ -25,25 +25,36 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(10), unique=True)
     password = db.Column(db.String(20))
-    blog = db.relationship('Blog', backref='owner')
+    blogs = db.relationship('Blog', backref='owner')
 
-    def __init__(self, username, password, blog):
+    def __init__(self, username, password, blogs):
         self.username = username
         self.password = password
-        self.blog = blog
+        self.blogs = blogs
 
 
 def title_validate(b_title):
     if b_title is None:
-        return "enter a title"
+        flash("You must enter a title")
     else:
         return ""
 
 def blog_validate(blog):
     if blog is None:
-        return "please enter a paragraph"
+        flash("please enter a paragraph")
     else:
         return ""
+
+def validate_username(username):
+    if not name:
+        flash('Username is required')
+    elif len(name) < 3 or len(name) > 20 or " " in name:
+        flash('Username must be between 3 and 20 characters, no spaces allowed')
+
+def validate_pass():
+    
+
+
 
 @app.before_request
 def require_login():
@@ -58,10 +69,17 @@ def index():
     id = request.args.get('id')
     if id != None:
         info=Blog.query.filter_by(id=id).all()
-        return render_template('blog.html', title=info[0].b_title, blog=info[0], one_post=True)
+        return render_template('blog.html',
+                               title=info[0].b_title,
+                               blog=info[0],
+                               one_post=True)
     else:
         info = Blog.query.all()
-        return render_template('blog.html', title="Build A Blog", blog=info, one_post=False)
+        return render_template('blog.html',
+                               title="Build A Blog",
+                               blog=info,
+                               one_post=False)
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -79,6 +97,30 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        # TODO - validate user's data
+
+        existing_user = User.query.filter_by(email=email).first()
+        if not existing_user:
+            new_user = User(username, password)
+            db.session.add(new_user)
+            db.session.commit()
+            session['username'] = username
+            return redirect('/')
+        else:
+            # TODO - user better response messaging
+            return "<h1>Duplicate user</h1>"
+
+    return render_template('signup.html')
+
+
+
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_blog():
@@ -86,7 +128,11 @@ def new_blog():
         b_title = request.form.get('name')
         blog = request.form.get('content')
         if title_validate(b_title) or blog_validate(blog) != "":
-            return render_template('newpost.html', title="Enter new blog", title_error=title_validate(b_title), c_error=blog_validate(blog), old_name=b_title, old_entry=blog)
+            return render_template('newpost.html',
+                                   title="Enter new blog",
+                                   title_error=title_validate(b_title),
+                                   c_error=blog_validate(blog),
+                                   old_name=b_title, old_entry=blog)
         else:
             new_blog = Blog(b_title, blog)
             db.session.add(new_blog)
@@ -95,27 +141,6 @@ def new_blog():
     else:
         return render_template("newpost.html", title="New One")
 
-@app.route('/register', methods=['POST', 'GET'])
-def register():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        verify = request.form['verify']
-
-        # TODO - validate user's data
-
-        existing_user = User.query.filter_by(email=email).first()
-        if not existing_user:
-            new_user = User(email, password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['email'] = email
-            return redirect('/')
-        else:
-            # TODO - user better response messaging
-            return "<h1>Duplicate user</h1>"
-
-return render_template('register.html')
 
 
 if __name__ == '__main__':
