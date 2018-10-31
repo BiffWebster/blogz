@@ -9,15 +9,18 @@
             <td>
                 <input name="username" type="text" value="{{ username }}">
             </td>
+            <div> <p>{{user_error}}"</p> </div>
         </tr>
         <tr>
             <td><label for="password">Password</label></td>
             <td>
+                <div><p>{{pass_error}}</p></div>
                 <input name="password" type="password">
             </td>
         </tr>
     </table>
     <input type="submit" value="Login">
+    </form>
     <div>Need an account?</div><a href='/signup'>Create Account</a>
-</form>
+
 {% endblock %}

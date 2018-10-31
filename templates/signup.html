@@ -8,19 +8,23 @@
             <td><label for="username">Username</label></td>
             <td>
                 <input name="username" type="text" value="{{ username }}">
+                <div>{{username_error}}</div>
             </td>
         </tr>
         <tr>
             <td><label for="password">Password</label></td>
             <td>
                 <input name="password" type="password">
+
             </td>
+            <div>{{password_error}}</div>
         </tr>
         <tr>
             <td><label for="verify">Verify Password</label></td>
             <td>
                 <input name="verify" type="password">
             </td>
+            <div>{{verify_error}}</div>
         </tr>
     </table>
     <input type="submit" value="Register">

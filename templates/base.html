@@ -5,12 +5,29 @@
     <title>{{b_title}}</title>
   </head>
   <body>
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
-      {% block footer %}
-        <a href="/blog">Main</a> <a href="/newpost">New Post</a>.
-      {% endblock %}
+    <div id="content">
+      <ul>
+        <li>
+          <a href='/login'>login</a>
+        </li>
+
+      </ul>
     </div>
-  <div><a href="/logout">Logout</a></div>
+    <ul>
+      <li>
+        <a href="/logout">logout</a>
+      </li>
+      <a>
+        <a href="'/blog_list">all posts</a>
+      </li>
+        <li><a href ='/newpost'>Post a new one</a>
+    </ul>
+    <div id="footer">
+
+        <a href="/blog">Main</a> <a href="/newpost">New Post</a>.
+
+    </div>
+    {% block content %}{% endblock %}
+
   </body>
 </html>

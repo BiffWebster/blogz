@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>
+    {{post.title}}
+</h1>
+<h2>
+    {{post.body}}
+</h2>
+<div>Author: <a href = '/singleUser?author={[post.owner.id}}'>{{post.owner.username}}</a></div>
