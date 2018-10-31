@@ -154,9 +154,9 @@ def new_post():
             db.session.add(new_blog)
             db.session.commit()
             return redirect('/blog_list?id=' + str(new_blog.id))
-        return render_template('newpost.html', title_error=title_error, body_error=body_error, owner=owner, body=body)
+        return render_template('singlepost.html', title_error=title_error, body_error=body_error, owner=owner, body=body, b_title=b_title)
     else:
-        return render_template("newpost.html")
+        return render_template("singlepost.html")
 
 
 

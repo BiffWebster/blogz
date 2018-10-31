@@ -12,7 +12,7 @@
             {% for blog in blog %}
           <a href='/blog_list?id={{blog.id}}'><h2>{{blog.b_title}}</h2> </a>
           <h3><p>{{blog.body}}</p></h3>
-            <div>Author: <a href = '/singleUser?author={[post.owner.id}}'>{{post.owner.username}}</a></div>
+            <div>Author: <a href = '/singleUser?author={[blog.owner.id}}'>{{blog.owner.username}}</a></div>
 
             {% endfor %}
         </ul>
