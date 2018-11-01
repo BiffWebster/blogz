@@ -1,33 +1,24 @@
 <!doctype html>
 <html>
-  <head>
+    <head>
+        <title>{{title}}</title>
+        <link rel="stylesheet" href="/static/main.css" type="text/css"/>
 
-    <title>{{b_title}}</title>
-  </head>
-  <body>
-    <div id="content">
-      <ul>
-        <li>
-          <a href='/login'>login</a>
-        </li>
+    </head>
+<body>
 
-      </ul>
+    <div>
+        <span>
+        <a href='/blogs'><h2>Main Blog Page!</h2></a>
+        <a href='/newposts'><h2>Add a Blog Page!</h2></a>
+        <a href='/'><h2>Home</h2></a>
+        <a href='/login'><h2>Login!</h2></a>
+        <a href='/logout'><h2>Logout!</h2></a>
+        </span>
     </div>
-    <ul>
-      <li>
-        <a href="/logout">logout</a>
-      </li>
-      <a>
-        <a href="'/blog_list">all posts</a>
-      </li>
-        <li><a href ='/newpost'>Post a new one</a>
-    </ul>
-    <div id="footer">
 
-        <a href="/blog">Main</a> <a href="/newpost">New Post</a>.
+    {% block content %}
+    {% endblock %}
 
-    </div>
-    {% block content %}{% endblock %}
-
-  </body>
+</body>
 </html>
